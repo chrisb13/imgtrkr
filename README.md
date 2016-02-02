@@ -21,6 +21,7 @@ Dependencies
 Usage
 ============
 This package can be used in two ways:
+
 1. imported as a python package (allows reading AND writing of metadata)
 1. command line for reading (ONLY) of metadata
 
