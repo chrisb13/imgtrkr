@@ -25,6 +25,12 @@ This package can be used in two ways:
 1. imported as a python package (allows reading AND writing of metadata)
 1. command line for reading (ONLY) of metadata
 
+Here's a movie that covers, installation and usage...
+
+[![asciicast](https://asciinema.org/a/9w3vq3y6ehmuyko60fsckcjna.png)](https://asciinema.org/a/9w3vq3y6ehmuyko60fsckcjna)
+
+Note: you can pause this video and copy and paste code!
+
 ## Examples
 1. See examples/pyeg.py (for pythong package usage)
 1. python main.py examples/test.png (for command line use)
