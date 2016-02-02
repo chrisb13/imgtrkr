@@ -21,10 +21,10 @@ Tiny python package to help save metadata to a file such that you know what scri
 
 Usage:
     main.py -h
-    main.py PNGPATH
+    main.py PNGPATH...
 Options:
     -h,--help          : show this help message
-    PNGPATH            : path to pngfile you want the metadata for
+    PNGPATH            : path to pngfile(s) you want the metadata for
 Examples:
     1] python main.py examples/test.png
     2] See examples/pyeg.py
@@ -32,6 +32,7 @@ Examples:
 """
 from PIL import Image
 from PIL import PngImagePlugin
+import os
 
 class AddTrkr(object):
     """
@@ -112,15 +113,21 @@ class RdTrkr(object):
         self.pngpath = pngpath 
         im2 = Image.open(self.pngpath)
         #_lg.info(im2.info)
-        print im2.info
+        # import pdb; pdb.set_trace()
+        _lg.info("File: "+os.path.basename(self.pngpath)+" has metadata: "+str(im2.info))
+        # print im2.info
 
 if __name__ == "__main__": 
     from docopt import docopt
     arguments = docopt(__doc__)
-    #if using argpasser
-    RdTrkr(arguments['PNGPATH'])
     from _cblogger import _LogStart
     _lg=_LogStart().setup()
+    #if using argpasser
+    if len(arguments['PNGPATH'])==1:
+        RdTrkr(arguments['PNGPATH'][0])
+    elif len(arguments['PNGPATH'])>1:
+        for pngp in arguments['PNGPATH']:
+            RdTrkr(pngp)
 else:
     from ._cblogger import _LogStart
     _lg=_LogStart().setup()
