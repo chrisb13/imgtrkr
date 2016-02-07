@@ -41,7 +41,8 @@ class AddTrkr(object):
     Parameters
     ----------
     pngpath: 
-    metadata: 
+    metadata (optional): whatever metadata you want to record to the file, if left blank, cpath is required. If blank will record name of file, machine run on and time, will also save the figure for you!
+    cpath (required if metadata={}, otherwise leave empty): specify path of file that called this function
 
     Returns
     -------
@@ -52,13 +53,20 @@ class AddTrkr(object):
 
     Example
     --------
+    >>> #using custom metadata
     >>> import imgtrkr as it
     >>> it.AddTrkr('/home/nfs/z3457920/hdrive/repos/test.png',{'moogy':'sdfasdf'})
+    >>>
+    >>> #using automated metadata (will save the png too!)
+    >>> import imgtrkr as it
+    >>> it.AddTrkr('/home/nfs/z3457920/hdrive/repos/test.png',{},cpath=os.path.realpath(__file__))
+
     """
-    def __init__(self, pngpath,metadata):
+    def __init__(self, pngpath,metadata={},cpath=''):
         #super(AddTrkr, self).__init__()
         self.pngpath = pngpath 
         self.metadata = metadata 
+        self.cpath = cpath 
 
         self.addmet()
         
@@ -80,12 +88,28 @@ class AddTrkr(object):
 
         # Use PIL to save some image metadata
 
-        im = Image.open(self.pngpath)
-        meta = PngImagePlugin.PngInfo()
 
-        for x in self.metadata:
-            meta.add_text(x, self.metadata[x])
-        im.save(self.pngpath, "png", pnginfo=meta)
+        #adding custom metadata
+        if self.metadata!={}:
+            im = Image.open(self.pngpath)
+            meta = PngImagePlugin.PngInfo()
+            for x in self.metadata:
+                meta.add_text(x, self.metadata[x])
+            im.save(self.pngpath, "png", pnginfo=meta)
+        else:
+            import matplotlib.pyplot as plt
+            import datetime
+            import socket
+            self.metadata={'Created with':self.cpath,'time':datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),'machine':socket.gethostname()}
+            plt.savefig(self.pngpath,dpi=300)
+
+            im = Image.open(self.pngpath)
+            meta = PngImagePlugin.PngInfo()
+
+            for x in self.metadata:
+                meta.add_text(x, self.metadata[x])
+            im.save(self.pngpath, "png", pnginfo=meta)
+        return
 
 
 class RdTrkr(object):
